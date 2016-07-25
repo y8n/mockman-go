@@ -2,7 +2,6 @@ var minimist = require('minimist');
 var path = require('path');
 var colors = require('colors');
 var Server = require('../app');
-var watch = require('node-watch');
 
 exports.run = function () {
     var options = getOptions(process.argv.slice(2));
@@ -62,7 +61,7 @@ function printHelpInfo() {
         '',
         colors.cyan('## Usage'),
         '',
-        colors.yellow('   mockman file_or_dirname [option]'),
+        colors.yellow('   mockman-java dirname [option]'),
         ''
     ].join('\n');
     console.log(str);

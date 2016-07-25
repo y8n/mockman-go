@@ -1,6 +1,6 @@
 {
   "name": "mockman-go",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "a simple mock server build by koa.js",
   "main": "app.js",
   "scripts": {
@@ -11,7 +11,8 @@
     "url": "git+ssh://git@github.com/y8n/mockman-go.git"
   },
   "bin": {
-    "mockman": "./bin/mockman"
+    "mockman": "./bin/mockman",
+    "mockman-java": "./bin/mockman-java"
   },
   "keywords": [
     "mock",

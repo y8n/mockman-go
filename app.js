@@ -26,7 +26,7 @@ Server.prototype.start = function () {
     var self = this;
     var app = self.app;
     var port = self.options.port;
-    var configApi = api(self.router, self.options.path);
+    var configApi = api(self.router, self.options);
     if(!configApi){
         return;
     }
@@ -35,7 +35,7 @@ Server.prototype.start = function () {
     console.log('server listening on port %d', port);
     if (self.options.watch && !watched) {
         watched = true;
-        watchDir(self.options.path, function () {
+        watchDir(self.options, function () {
             self.restart();
         });
     }
@@ -54,8 +54,13 @@ function watchFilter(pattern, fn) {
         }
     }
 }
-function watchDir(path, cb) {
-    watch(path, watchFilter(/\.js$/, function (filename) {
+function watchDir(options, cb) {
+    var path = options.path;
+    var reg = /\.js$/;
+    if(options.java){
+        reg = /\.java$/;
+    }
+    watch(path, watchFilter(reg, function (filename) {
         cb(filename);
     }));
 }
