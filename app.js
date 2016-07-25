@@ -55,7 +55,7 @@ function watchFilter(pattern, fn) {
     }
 }
 function watchDir(path, cb) {
-    watch(path, watchFilter(/\.(js|json)$/, function (filename) {
+    watch(path, watchFilter(/\.js$/, function (filename) {
         cb(filename);
     }));
 }

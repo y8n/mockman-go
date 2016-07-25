@@ -48,18 +48,18 @@ module.exports = {
 	}
 };
 ```
-或者是json文件
+或者指定为是json文件的内容
 
 ```
-{
+module.exports = {
 	url: '/mock/path',
 	method: 'post',
 	response: '../path/to/json/or/node_module'
-}
+};
 ```
 API的配置可以指定mock数据的地址、方式以及请求回复。
 
-- `url`：指定请求地址，**必须指定，不然该配置无效**
+- `url`：指定请求地址，字符串或字符串数组，**必须至少指定一个，不然该配置无效**
 - `method`：请求方式，默认是`get`，必须是可用的请求方式之一，参考NodeJS[官方文档](https://nodejs.org/dist/latest-v4.x/docs/api/http.html#http_http_methods)
 - `response`：回复内容，可以是字符串表示的地址，`require()`这个地址之后的内容即为mock请求的返回数据。也可以是方法，则方法的返回值即为请求的响应值。
 	- `request`：当`response`指定为函数时，有一个参数可以使用，包含了该请求中的参数信息。
