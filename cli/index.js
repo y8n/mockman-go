@@ -2,36 +2,33 @@ var minimist = require('minimist');
 var path = require('path');
 var colors = require('colors');
 var Server = require('../app');
-var watch = require('node-watch');
 
 exports.run = function () {
-    var options = getOptions(process.argv.slice(2));
+    var options = exports.getOptions(process.argv.slice(2));
     if (options.help) {
-        return printHelpInfo();
+        return exports.printHelpInfo('mockman file_or_dirname');
     }
     if (options.version) {
-        return printVersionInfo();
+        return exports.printVersionInfo();
     }
-    options.java = true;
     var app = new Server(options);
     app.start();
 };
 
-function getOptions(argv) {
+exports.getOptions = function getOptions(argv) {
     var options = minimist(
         argv || [], {
-            boolean: ['help', 'version', 'watch'],
-            string: ['port'],
-            default:{
+            boolean: ['help', 'version'],
+            string: ['port', 'root'],
+            default: {
                 port: Server.DEFAULT_PORT,
-                watch: false,
                 path: process.cwd()
             },
             alias: {
                 h: 'help',
                 v: 'version',
                 p: 'port',
-                w: 'watch'
+                r: 'root'
             }
         }
     );
@@ -40,15 +37,25 @@ function getOptions(argv) {
     } else {
         options.path = process.cwd();
     }
+    var port = options.port;
+    port = parseInt(port, 10);
+    if (isNaN(port)) {
+        options.port = options.p = Server.DEFAULT_PORT;
+    }
+    var root = options.root;
+    if (root) {
+        options.root = options.r = path.resolve(process.cwd(), root);
+    }
     return options;
-}
+};
 
-function printVersionInfo() {
+exports.printVersionInfo = function printVersionInfo() {
     var pkg = require('../package');
     console.log('%s v%s', pkg.name, pkg.version);
-}
+};
 
-function printHelpInfo() {
+exports.printHelpInfo = function printHelpInfo(usage) {
+    usage = usage || 'mockman file_or_dirname';
     var str = [
         '',
         colors.cyan('# mockman-go'),
@@ -58,11 +65,11 @@ function printHelpInfo() {
         '   -v,--version         show version info',
         '   -h,--help            show help info',
         '   -p,--port            specify the port',
-        '   -w,--watch           watch the directory',
+        '   -r,--root            specify the server root directory',
         '',
         colors.cyan('## Usage'),
         '',
-        colors.yellow('   mockman file_or_dirname [option]'),
+        colors.yellow('   ' + usage + ' [option]'),
         ''
     ].join('\n');
     console.log(str);
