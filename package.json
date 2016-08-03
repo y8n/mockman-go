@@ -1,6 +1,6 @@
 {
   "name": "mockman-go",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "a simple mock server build by koa.js",
   "main": "app.js",
   "scripts": {
