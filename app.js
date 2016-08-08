@@ -1,6 +1,7 @@
 var koa = require('koa');
 var bodyParser = require('koa-bodyparser');
 var Router = require('koa-router');
+var RouteParser = require('route-parser');
 var koaStatic = require('koa-static');
 var destroyable = require('server-destroy');
 var api = require('./lib/api');
@@ -22,6 +23,14 @@ function Server(options) {
             var isMockPath = self.apis.find(function (api) {
                 return api.url.indexOf(reqPath) !== -1;
             });
+            if(!isMockPath){
+                isMockPath = self.apis.find(function(api){
+                    return api.url.find(function(url){
+                        var route = new RouteParser(url);
+                        return route.match(reqPath);
+                    });
+                });
+            }
             // 不在配置列表里或者默认的API都是可转发的,除非指定proxy为false
             if (!isMockPath || isMockPath.proxy) {
                 try {
